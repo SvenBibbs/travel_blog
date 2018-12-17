@@ -1,0 +1,269 @@
+<!DOCTYPE html>
+<html>
+
+<head>
+    <meta charset="utf-8" />
+    <title>IT1-Beleg</title>
+    <meta name="viewport" content="width=device-width, initial-scale=1">
+
+    <!-- Google Fonts -->
+    <link href="https://fonts.googleapis.com/css?family=Montserrat" rel="stylesheet">
+    <link href="https://fonts.googleapis.com/css?family=Rock+Salt" rel="stylesheet">
+
+    <link rel="stylesheet" href="https://maxcdn.bootstrapcdn.com/bootstrap/3.3.7/css/bootstrap.min.css">
+    <link rel="stylesheet" href="stylesheets/style.css" />
+
+    <script src="https://ajax.googleapis.com/ajax/libs/jquery/3.3.1/jquery.min.js"></script>
+    <script src="https://maxcdn.bootstrapcdn.com/bootstrap/3.3.7/js/bootstrap.min.js"></script>
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/4.7.0/css/font-awesome.min.css">
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/moment.js/2.22.1/moment.min.js"></script>
+</head>
+
+<body>
+
+    <!-- Fixed navbar -->
+    <nav class="navbar navbar-default navbar-fixed-top">
+        <div class="container">
+            <div class="navbar-header">
+                <button type="button" class="navbar-toggle collapsed" data-toggle="collapse" data-target="#navbar" aria-expanded="false"
+                    aria-controls="navbar">
+                    <span class="sr-only">Toggle navigation</span>
+                    <span class="icon-bar"></span>
+                    <span class="icon-bar"></span>
+                    <span class="icon-bar"></span>
+                </button>
+                <a href="index.html">
+                    <img src="img_src/blog_logo.jpg" height= 50px/>
+                </a>
+            </div>
+            <div id="navbar" class="navbar-collapse collapse">
+                <ul class="nav navbar-nav">
+                    <li class="active">
+                        <a href="index.html">HOME</a>
+                    </li>
+                    <li class="dropdown">
+                        <a href="#" class="dropdown-toggle" data-toggle="dropdown" role="button" aria-haspopup="true" aria-expanded="false">ADMIN
+                            <span class="caret"></span>
+                        </a>
+                        <ul class="dropdown-menu">
+                            <li>
+                                <a href="editpost.html">New or Edit Post</a>
+                            </li>
+                            <li>
+                                <a href="uploadpics.html">Upload Pictures</a>
+                            </li>
+                        </ul>
+                    </li>
+                </ul>
+            </div>
+            <!--/.nav-collapse -->
+        </div>
+    </nav>
+
+    <div class="container">
+        <!-- Header -->
+        <div class="jumbotron text-center header">
+            <h1 class="img-responsive center-block fancy">This is my fancy blog</h1>
+        </div>
+
+        <div class="row">
+
+            <!--Main Feed-->
+
+            <div class="col-sm-9" style="/*border:1px solid;*/ background-color:#EEEEEE;">
+                <div class="post"></div>
+                <div class="editor">
+                    <div class="col-md-12">
+                        <div id="panel9" class="panel panel-default" data-role="panel">
+                            <div class="panel-heading">Kommentar verfassen</div>
+                            <div class="panel-body">
+
+                                <div class="row" style="display: block;">
+                                    <div class="col-md-6">
+                                        <div class="form-group">
+                                            <label class="control-label" for="name">Name:</label>
+                                            <div class="controls">
+
+                                                <input id="name" type="text" class="form-control k-textbox" data-role="text" data-parsley-errors-container="#errId1">
+                                                <span id="errId1" class="error"></span>
+                                            </div>
+
+                                        </div>
+                                    </div>
+                                    <div class="col-md-6">
+                                        <div class="form-group">
+                                            <label class="control-label" for="mail">Email</label>
+                                            <div class="controls">
+
+                                                <input id="mail" type="text" class="form-control k-textbox" data-role="text" data-parsley-errors-container="#errId2">
+                                                <span id="errId2" class="error"></span>
+                                            </div>
+
+                                        </div>
+                                    </div>
+                                </div>
+                                <div class="form-group" style="display: block;">
+                                    <label class="control-label" for="textarea">Text:</label>
+                                    <div class="controls">
+
+                                        <textarea id="textarea" rows="3" class="form-control k-textbox" data-role="textarea" autocomplete="off" data-parsley-errors-container="#errId3"></textarea>
+                                        <span id="errId3" class="error"></span>
+                                    </div>
+
+                                </div>
+                                <div class="form-group pull-right" style="display: block;">
+
+
+
+                                        <button id="button6" type="button" class="btn btn-default" onclick="comment()">Senden</button>
+                                    </div>
+                            </div>
+                        </div>
+
+                    </div>
+                </div>
+
+
+
+
+
+                <div class="comments"></div>
+            </div>
+
+            <!--Sidebar latest Posts-->
+
+            <div class="col-sm-3" style="background-color:#EEEEEE;">
+                <h3 class="fancy sidebar-header">Latest Posts</h3>
+                <div class="latestPosts"></div>
+
+                <p class="text-center">
+                    <a href="https://de-de.facebook.com/HTWDresden/" class="fa fa-facebook"></a>
+                    <a href="https://twitter.com/dresdenhtw?lang=de" class="fa fa-twitter"></a>
+                    <a href="https://www.instagram.com/htwdresden/?hl=de" class="fa fa-instagram"></a>
+                    <a href="https://www.youtube.com/channel/UCykd_8EtaqP0QYQYNVO8MSg" class="fa fa-youtube"></a>
+                </p>
+            </div>
+        </div>
+    </div>
+
+
+
+    <script src="https://ajax.googleapis.com/ajax/libs/jquery/1.12.4/jquery.min.js"></script>
+    <script>
+        window.jQuery || document.write('<script src="../../assets/js/vendor/jquery.min.js"><\/script>')
+    </script>
+    <script src="../../dist/js/bootstrap.min.js"></script>
+    <!-- IE10 viewport hack for Surface/desktop Windows 8 bug -->
+    <script src="../../assets/js/ie10-viewport-bug-workaround.js"></script>
+
+    <script>
+        var RequestType = {
+            FEED: 1,
+            LATEST: 2,
+            POST: 3
+        };
+
+        $(document).ready(function () {
+            loadPost();
+            loadLatestPosts(10);
+        })
+
+        function loadPosts(param, type) {
+
+            $.ajax({
+                url: 'api/posts.api.php',
+                type: 'get',
+                data: param,
+                success: function (output) {
+                    if (type == RequestType.POST) {
+                        $('.post').empty();
+                        var time = moment.unix(output.timestamp);
+                        $(".post").append(
+                            `
+                            <h3 class="text-center">${output.title}</h3>
+                            <h5 class="text-center">- ${time.format('DD.MM.YY')} -</h5>
+                            <br />
+                            <p class="text-justify">
+                                ${output.htmlText}
+                            </p>
+                            `
+                        )
+                        $('.comments').empty();
+                        jQuery.each(output.comments, function (i, val) {
+                            var time = moment.unix(val.timestamp);
+                            $(".comments").append(
+                                `
+                                <div class="comment">
+                                    <a href="mailto:${val.mail}"><h4>${val.name}</h4></a>
+                                    <p>${time.format('DD.MM.YY')}</p>
+                                    <p>
+                                        ${val.text}
+                                    </p>
+                                </div>
+                            `
+                            )
+                        });
+
+
+                    } else {
+                      jQuery.each(output.result, function (i, val) {
+                        var time = moment.unix(val.timestamp);
+                        $(".latestPosts").append(`
+                          <h5>${time.format('DD.MM.YY')}</h5>
+                          <a href="detailpost.html?id=${val.id}"><h5>${val.title}</h5></a>
+                        `);
+                      })
+                    }
+
+                },
+                dataType: "json"
+            });
+        }
+
+        function getQueryParams(qs) {
+            qs = qs.split("+").join(" ");
+            var params = {},
+                tokens,
+                re = /[?&]?([^=]+)=([^&]*)/g;
+
+            while (tokens = re.exec(qs)) {
+                params[decodeURIComponent(tokens[1])] = decodeURIComponent(tokens[2]);
+            }
+            return params;
+        }
+
+        function loadPost() {
+            var params = getQueryParams(document.location.search);
+            loadPosts(params, RequestType.POST);
+        }
+
+        function loadLatestPosts(count) {
+            var params = {
+                count: count
+            }
+            loadPosts(params, RequestType.LATEST);
+        }
+
+        function comment() {
+            var params = getQueryParams(document.location.search);
+            params['name'] = $('#name').val();
+            params['mail'] = $('#mail').val();
+            params['text'] = $('#textarea').val();
+
+            $.ajax({
+                url: 'api/comments.api.php',
+                type: 'post',
+                data: params,
+                success: function (result) {
+                    loadPost();
+                    $('#name').val('');
+                    $('#mail').val('');
+                    $('#textarea').val('');
+                },
+                dataType: 'json'
+            });
+        }
+    </script>
+</body>
+
+</html>

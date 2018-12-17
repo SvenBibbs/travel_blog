@@ -1,0 +1,9 @@
+version: '3'
+services:
+
+  apache:
+    image: webgriffe/php-apache-base:latest
+    volumes:
+      - .:/var/www/html/:z
+    ports:
+      - 8080:80

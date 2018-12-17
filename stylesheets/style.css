@@ -1,0 +1,213 @@
+/* ---------------------------------------------------
+          GENERAL
+------------------------------------------------------*/
+
+* {
+  font-family: 'Montserrat', sans-serif;
+}
+
+.fancy {
+  font-family: 'Rock Salt';
+}
+
+.sidebar-header {
+  margin-bottom: 15px;
+}
+
+.clearfix::after {
+  content: "";
+  clear: both;
+  display: table;
+}
+
+/* ---------------------------------------------------
+          NAVBAR
+------------------------------------------------------*/
+
+  body {
+    background-color: #EEEEEE;
+  }
+
+
+ .navbar-default .navbar-nav > li > a:hover, .navbar-default .navbar-nav > li > a:focus {
+     color: #000; /*Sets the text hover color on navbar*/
+ }
+
+ .navbar-default .navbar-nav > .active > a, .navbar-default .navbar-nav > .active >
+         a:hover, .navbar-default .navbar-nav > .active > a:focus {
+     color: #EA9A89; /*BACKGROUND color for active*/
+     background-color: white;
+ }
+
+ .navbar-default {
+     background-color: white;
+     border-color: white;
+ }
+
+ .dropdown-menu > li > a:hover,
+ .dropdown-menu > li > a:focus {
+     color: #262626;
+     text-decoration: none;
+     background-color: #EA9A89; /*change color of links in drop down here*/
+ }
+
+ .nav > li > a:hover,
+ .nav > li > a:focus {
+     text-decoration: none;
+     background-color: silver; /*Change rollover cell color here*/
+ }
+
+ .navbar-default .navbar-nav > li > a {
+     color: grey; /*Change active text color here*/
+ }
+
+
+ /* ---------------------------------------------------
+           HOME
+ ------------------------------------------------------*/
+
+ .col-sm-3 .fa {
+   padding: 9px;
+   height: 40px;
+   font-size: 23px;
+   width: 40px;
+   text-align: center;
+   text-decoration: none;
+   margin: 5px 2px;
+   border-radius: 50%;
+   background: #EA9A89;
+   color: white;
+ }
+
+ .col-sm-3 .fa:hover {
+     opacity: 0.7;
+     color: white;
+ }
+
+
+ /* ---------------------------------------------------
+           NEW POST
+ ------------------------------------------------------*/
+
+ .posttitle input[type=text] {
+   border-radius: 5px;
+   border: 1px solid #ccc;
+   padding-top: 10px;
+   padding-bottom: 10px;
+   padding-left: 10px;
+   font-size: 16px;
+   width: 100%;
+ }
+
+ .postheader .img-responsive {
+   max-height: 80px;
+ }
+
+ /* ---------------------------------------------------
+           EDIT POST
+ ------------------------------------------------------*/
+
+
+
+ /* ---------------------------------------------------
+           UPLOAD PICTURES
+ ------------------------------------------------------*/
+
+ .preview {
+   max-width:   150px;
+ }
+
+ .uploadList {
+    width: 100%;
+    margin-bottom: 40px;
+  }
+
+.uploadList tr:nth-child(odd) {background: #FFF}
+
+.uploadList td.picture {
+  width: 150px;
+  padding-right: 10px;
+}
+
+.uploadList td.actions {
+  text-align: right;
+  width: 145px;
+}
+
+ /*---------------------------------------------------
+        EDITOR
+----------------------------------------------------*/
+
+.editor {
+  display: block;
+  padding-top: 20px;
+  border-top: gray solid 2px;
+}
+
+.save {
+  float: right;
+}
+
+ /*---------------------------------------------------
+        COMMENTS
+----------------------------------------------------*/
+
+.comments .comment:not(:first-child) {
+  padding-top: 10px;
+  border-top: gray solid 1px;
+}
+
+.comment {
+  margin-bottom: 15px;
+  margin-left: 40px;
+  margin-right: 40px;
+}
+
+ /*---------------------------------------------------
+        ALL POSTS
+----------------------------------------------------*/
+
+.allPosts {
+  width: 100%;
+  margin-bottom: 40px;
+}
+
+.allPosts tr:nth-child(odd) {background: #FFF}
+
+.allPosts td {
+  padding-top: 10px;
+  padding-bottom: 10px;
+}
+
+.allPosts td.title {
+  min-width: 35%;
+}
+
+.allPosts td.time {
+  width: 55px;
+}
+
+.allPosts td.actions {
+  text-align: right;
+  width: 145px;
+}
+
+ /*---------------------------------------------------
+        PAGING
+----------------------------------------------------*/
+
+.paging {
+  margin-top: 20px;
+}
+
+.next {
+  float: right;
+  width: 50px;
+  display: inline-block;
+}
+
+.previous {
+  text-align: left;
+  width: 50px;
+  display: inline-block;
+}

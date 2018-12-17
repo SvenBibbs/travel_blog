@@ -1,0 +1,211 @@
+<!DOCTYPE html>
+<html>
+
+<head>
+  <meta charset="utf-8" />
+  <title>IT1-Beleg</title>
+  <meta name="viewport" content="width=device-width, initial-scale=1">
+
+  <!-- Google Fonts -->
+  <link href="https://fonts.googleapis.com/css?family=Montserrat" rel="stylesheet">
+  <link href="https://fonts.googleapis.com/css?family=Rock+Salt" rel="stylesheet">
+
+  <link rel="stylesheet" href="https://maxcdn.bootstrapcdn.com/bootstrap/3.3.7/css/bootstrap.min.css">
+  <link rel="stylesheet" href="stylesheets/style.css" />
+
+  <script src="https://ajax.googleapis.com/ajax/libs/jquery/3.3.1/jquery.min.js"></script>
+  <script src="https://maxcdn.bootstrapcdn.com/bootstrap/3.3.7/js/bootstrap.min.js"></script>
+  <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/4.7.0/css/font-awesome.min.css">
+  <link rel="stylesheet" href="https://cdn.jsdelivr.net/simplemde/latest/simplemde.min.css">
+  <script src="https://cdn.jsdelivr.net/simplemde/latest/simplemde.min.js"></script>
+  <script src="https://cdnjs.cloudflare.com/ajax/libs/moment.js/2.22.1/moment.min.js"></script>
+</head>
+
+
+
+<body>
+
+  <!-- Fixed navbar -->
+  <nav class="navbar navbar-default navbar-fixed-top">
+    <div class="container">
+      <div class="navbar-header">
+        <button type="button" class="navbar-toggle collapsed" data-toggle="collapse" data-target="#navbar" aria-expanded="false"
+          aria-controls="navbar">
+          <span class="sr-only">Toggle navigation</span>
+          <span class="icon-bar"></span>
+          <span class="icon-bar"></span>
+          <span class="icon-bar"></span>
+        </button>
+        <a href="index.html">
+          <img src="img_src/blog_logo.jpg" height= 50px/>
+        </a>
+      </div>
+      <div id="navbar" class="navbar-collapse collapse">
+        <ul class="nav navbar-nav">
+          <li class="active">
+            <a href="index.html">HOME</a>
+          </li>
+          <li class="dropdown">
+            <a href="#" class="dropdown-toggle" data-toggle="dropdown" role="button" aria-haspopup="true" aria-expanded="false">ADMIN
+              <span class="caret"></span>
+            </a>
+            <ul class="dropdown-menu">
+              <li>
+                <a href="editpost.html">New or Edit Post</a>
+              </li>
+              <li>
+                <a href="uploadpics.html">Upload Pictures</a>
+              </li>
+            </ul>
+          </li>
+        </ul>
+      </div>
+      <!--/.nav-collapse -->
+    </div>
+  </nav>
+
+  <div class="container">
+    <!-- Header -->
+    <div class="jumbotron text-center">
+      <h1 class="img-responsive center-block fancy">New or edit post</h1>
+    </div>
+
+    <div class="posttitle">
+      <input type="text" id="title" name="posttitle" placeholder="Insert title..." />
+    </div>
+
+    <textarea></textarea>
+
+    <a onclick="savePost()" class="btn btn-default save">Save</a>
+
+    <div class="clearfix"></div>
+
+    <div class="postheader">
+      <h3 class="fancy sidebar-header">All Posts</h3>
+      <table class="allPosts"></table>
+    </div>
+  </div>
+
+  <script>
+    var simplemde = new SimpleMDE();
+    var params = getQueryParams(document.location.search);
+    var post = null;
+    var posts = {};
+
+    $(document).ready(function () {
+      loadAllPosts();
+      if (params.id != null) {
+        loadPost(params.id);
+      } // load post to edit if necessary
+    })
+
+    function loadPost(id) {
+      $.ajax({
+        url: 'api/posts.api.php',
+        type: 'get',
+        data: {
+          id: id
+        },
+        success: function (result) {
+          post = result;
+          simplemde.value(post.text);
+          $("#title").val(post.title);
+        },
+        dataType: 'json'
+      })
+    }
+
+    function getQueryParams(qs) {
+      qs = qs.split("+").join(" ");
+      var params = {},
+        tokens,
+        re = /[?&]?([^=]+)=([^&]*)/g;
+
+      while (tokens = re.exec(qs)) {
+        params[decodeURIComponent(tokens[1])] = decodeURIComponent(tokens[2]);
+      }
+      return params;
+    }
+
+    function savePost() {
+      $type = 'post';
+      if (post == null) {
+        post = {
+          'text': simplemde.value(),
+          'title': $("#title").val()
+        };
+      } else {
+        post.text = simplemde.value();
+        post.title = $("#title").val();
+        $type = 'put';
+      }
+      $.ajax({
+        url: 'api/posts.api.php',
+        type: $type,
+        data: {
+          post: JSON.stringify(post)
+        },
+        success: function (result) {
+          simplemde.value("");
+          $("#title").val("");
+          loadAllPosts();
+        },
+        dataType: 'json'
+      });
+    }
+
+    function updatePosts(posts) {
+      if(!posts) {
+        loadAllPosts();
+      } else {
+        $(".allPosts").empty();
+      jQuery.each(posts, function (i, val) {
+        var time = moment.unix(val.timestamp);
+        $(".allPosts").append(
+          `
+                <tr>
+                  <td class="title">
+                    ${val.title}
+                  </td>
+                  <td class="time">
+                    ${time.format('DD.MM.YY')}
+                  </td>
+                  <td class="actions">
+                    <a href="editpost.html?id=${val.id}" class="btn btn-default">Edit</a>
+                    <a onclick="deletePost('${val.id}')" class="btn btn-default">Delete</a>
+                  </td>
+                </tr>
+            `
+        );
+      })
+      }
+    }
+
+    function deletePost(id) {
+      $.ajax({
+        url: 'api/posts.api.php',
+        type: 'delete',
+        data: {
+          id: id
+        },
+        success: function (result) {
+          loadAllPosts();
+        },
+        dataType: 'json'
+      })
+    }
+
+    function loadAllPosts() {
+      $.ajax({
+        url: 'api/posts.api.php',
+        type: 'get',
+        success: function (output) {
+          updatePosts(output.result);
+        },
+        dataType: "json"
+      });
+    }
+  </script>
+</body>
+
+</html>

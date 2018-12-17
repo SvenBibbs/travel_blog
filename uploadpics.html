@@ -1,0 +1,229 @@
+<!DOCTYPE html>
+<html>
+
+<head>
+  <meta charset="utf-8" />
+  <title>IT1-Beleg</title>
+  <meta name="viewport" content="width=device-width, initial-scale=1">
+
+  <!-- Google Fonts -->
+  <link href="https://fonts.googleapis.com/css?family=Montserrat" rel="stylesheet">
+  <link href="https://fonts.googleapis.com/css?family=Rock+Salt" rel="stylesheet">
+
+  <link rel="stylesheet" href="https://maxcdn.bootstrapcdn.com/bootstrap/3.3.7/css/bootstrap.min.css">
+  <link rel="stylesheet" href="stylesheets/style.css" />
+
+  <script src="https://ajax.googleapis.com/ajax/libs/jquery/3.3.1/jquery.min.js"></script>
+  <script src="https://maxcdn.bootstrapcdn.com/bootstrap/3.3.7/js/bootstrap.min.js"></script>
+  <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/4.7.0/css/font-awesome.min.css">
+</head>
+
+
+<body>
+
+  <!-- Fixed navbar -->
+  <nav class="navbar navbar-default navbar-fixed-top">
+    <div class="container">
+      <div class="navbar-header">
+        <button type="button" class="navbar-toggle collapsed" data-toggle="collapse" data-target="#navbar" aria-expanded="false"
+          aria-controls="navbar">
+          <span class="sr-only">Toggle navigation</span>
+          <span class="icon-bar"></span>
+          <span class="icon-bar"></span>
+          <span class="icon-bar"></span>
+        </button>
+        <a href="index.html">
+          <img src="img_src/blog_logo.jpg" height= 50px/>
+        </a>
+      </div>
+      <div id="navbar" class="navbar-collapse collapse">
+        <ul class="nav navbar-nav">
+          <li class="active">
+            <a href="index.html">HOME</a>
+          </li>
+          <li class="dropdown">
+            <a href="#" class="dropdown-toggle" data-toggle="dropdown" role="button" aria-haspopup="true" aria-expanded="false">ADMIN
+              <span class="caret"></span>
+            </a>
+            <ul class="dropdown-menu">
+              <li>
+                <a href="editpost.html">New or Edit Post</a>
+              </li>
+              <li>
+                <a href="uploadpics.html">Upload Pictures</a>
+              </li>
+            </ul>
+          </li>
+        </ul>
+      </div>
+      <!--/.nav-collapse -->
+    </div>
+  </nav>
+  <div class="container">
+    <!-- Header -->
+    <div class="jumbotron text-center">
+      <h1 class="img-responsive center-block fancy">Upload Pictures</h1>
+    </div>
+
+    <div class="upload">
+      <div class="form-group">
+        <div class="input-group input-file" name="Fichier1">
+            <input type="text" class="form-control filename" placeholder='Choose a file...'/>
+                <span class="input-group-btn">
+                <button class="btn btn-default btn-choose" type="button">Choose</button>
+            </span>
+        </div>
+      </div>
+
+      <a onClick="uploadButtonPressed();" class="btn btn-default" id="send-button">Upload</a>
+    </div>
+
+    <div class="center_wrapper">
+      <label class="statusLabel"></label>
+    </div>
+
+    <div class="postheader">
+      <h3 class="fancy sidebar-header">All Images</h3>
+      <table class="uploadList"></table>
+    </div>
+
+  </div>
+
+  <script>
+    $(document).ready(function () {
+      loadUploads();
+      bs_input_file()
+    })
+
+    function loadUploads() {
+      $.ajax({
+        url: 'api/files.api.php',
+        type: 'get',
+        success: function (result) {
+          updateFileList(result);
+        },
+        dataType: "json"
+      })
+    }
+
+    function updateFileList(files) {
+      $(".uploadList").empty();
+      jQuery.each(files, function (i, val) {
+        $(".uploadList").append(
+          `
+                <tr>
+                  <td class="picture">
+                    <img src="${val.PATH}" class="preview">
+                  </td>
+                  <td class="name">
+                    ${val.BASENAME}
+                  </td>
+                  <td class="actions">
+                    <a onclick="deleteUpload('${val.BASENAME}')" class="btn btn-default">delete</a>
+                  </td>
+                </tr>
+              `
+        )
+      })
+    }
+
+    function uploadButtonPressed() {
+      var uploadfiles = document.querySelector('.input-ghost');
+      var files = uploadfiles.files;
+      if (files.length == 0) {
+        $(".statusLabel").html("Keine Datei ausgewaehlt");
+      } else {
+        for (var i = 0; i < files.length; i++) {
+          uploadFile(files[i]);
+        }
+      }
+    }
+
+    function uploadFile(file) {
+      var url = "php_scripts/upload.php";
+      var xhr = new XMLHttpRequest(); //per post rüber
+      var fd = new FormData();
+      xhr.open("POST", url, true);
+      xhr.onreadystatechange = function () {
+        if (xhr.readyState == 4 && xhr.status == 200) {
+          // Every thing ok, file uploaded
+          $(".statusLabel").html("Upload erfolgreich");
+
+          $(".btn-default").removeClass("btn-raised");
+          $(".btn-default").addClass("btn-disabled");
+          var uploadfiles = document.querySelector('.input-ghost');
+          uploadfiles.files = null;
+          $('.filename').val('');
+          loadUploads(); //Lise wird aktualisiert
+        }
+      };
+      fd.append('uploaded_file', file);
+      xhr.send(fd);
+    }
+
+    function activateUpload() {
+      var uploadfiles = document.querySelector('#uploadfiles');
+      var files = uploadfiles.files;
+      if (files.length != 0) {
+        $(".btn-default").removeClass("btn-disabled");
+        $(".btn-default").addClass("btn-raised");
+        $(".statusLabel").html("");
+      } else {
+        $(".btn-default").removeClass("btn-raised");
+        $(".btn-default").addClass("btn-disabled");
+        $(".statusLabel").html("");
+      }
+    }
+    //bist du dir wirklich sicher das du löschen willst
+    function deleteUpload(filename) {
+      if (confirm('do you really want to delete this upload?')) {
+        $.ajax({
+          url: 'api/files.api.php',
+          type: 'get',
+          data: {
+            file: filename
+          },
+          success: function (output) {
+            if (output.length >= 0) {
+
+              //refresht und so
+              updateFileList(output);
+            } else {
+              alert('something went wrong. Try again!');
+            }
+          },
+          dataType: 'json'
+        })
+      }
+    }
+
+    function bs_input_file() {
+	$(".input-file").before(
+		function() {
+			if ( ! $(this).prev().hasClass('input-ghost') ) {
+				var element = $("<input type='file' class='input-ghost' style='visibility:hidden; height:0'>");
+				element.attr("name",$(this).attr("name"));
+				element.change(function(){
+					element.next(element).find('input').val((element.val()).split('\\').pop());
+				});
+				$(this).find("button.btn-choose").click(function(){
+					element.click();
+				});
+				$(this).find("button.btn-reset").click(function(){
+					element.val(null);
+					$(this).parents(".input-file").find('input').val('');
+				});
+				$(this).find('input').css("cursor","pointer");
+				$(this).find('input').mousedown(function() {
+					$(this).parents('.input-file').prev().click();
+					return false;
+				});
+				return element;
+			}
+		}
+	);
+}
+  </script>
+</body>
+
+</html>
